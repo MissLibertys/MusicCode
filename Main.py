@@ -39,10 +39,8 @@ async def audio_player_task():
         current.start()
         await play_next_song.wait()
 
-
 def toggle_next():
     client.loop.call_soon_threadsafe(play_next_song.set)
-
 
 @client.command(pass_context=True)
 async def plays(ctx, url):
@@ -120,7 +118,7 @@ async def _play(ctx, *, name):
 	player.start()
 	embed = discord.Embed(description=" ")
 	embed.add_field(name="Now Playing", value=title)
-	embed.add_field(name="Youtube video", value=f"[Link](https://youtube.com " + title)")
+	embed.add_field(name="Youtube video", value=f"[Link](https://youtube.com + title)")
 	await client.say(embed=embed)
 	
 @client.command(pass_context=True)
