@@ -118,7 +118,7 @@ async def _play(ctx, *, name):
 	player.start()
 	embed = discord.Embed(description=" ")
 	embed.add_field(name="Now Playing", value=title)
-	embed.add_field(name="Youtube Video Link", value=f"[Link]("https://youtube.com/results?search_query=" + name)")
+	embed.add_field(name="Youtube Video Link", value=f"[Link](https://youtube.com/results?search_query= + name)")
 	await client.say(embed=embed)
 	
 @client.command(pass_context=True)
