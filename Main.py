@@ -97,6 +97,16 @@ async def skip(ctx):
     embed.add_field(name="Player Skipped", value=f"Requested by {ctx.message.author.name}")
     await client.say(embed=embed)
 	
+@client.command(pass_context=True)
+async def stop(ctx):
+	user = ctx.message.author
+	id = ctx.message.server.id
+	players[id].stop()
+	await voice_client.disconnect()
+	embed = discord.Embed(color=user.colour)
+	embed.add_field(name="Player stopped", value=f"Requested by {ctx.message.author.name}")
+	await client.say(embed=embed)
+	
 @client.command(name="play", pass_context=True)
 async def _play(ctx, *, name):
 	author = ctx.message.author
@@ -118,7 +128,7 @@ async def _play(ctx, *, name):
 	player.start()
 	embed = discord.Embed(description=" ")
 	embed.add_field(name="Now Playing", value=title)
-	embed.add_field(name="Youtube Video Link", value=f"[Link](https://youtube.com/results?search_query= + name)")
+	embed.add_field(name="Youtube Video Link", value=f"[Link](https://youtube.com/)")
 	await client.say(embed=embed)
 	
 @client.command(pass_context=True)
