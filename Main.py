@@ -12,8 +12,6 @@ from discord import opus
 start_time = time.time()
 
 client = commands.Bot(command_prefix=("m."))
-songs = asyncio.Queue()
-play_next_song = asyncio.Event()
 client.remove_command("help")
 
 players = {}
@@ -31,26 +29,6 @@ async def on_ready():
 	print("User name:", client.user.name)
 	print("User id:", client.user.id)
 	print('---------------')
-	
-async def audio_player_task():
-    while True:
-        play_next_song.clear()
-        current = await songs.get()
-        current.start()
-        await play_next_song.wait()
-
-def toggle_next():
-    client.loop.call_soon_threadsafe(play_next_song.set)
-
-@client.command(pass_context=True)
-async def plays(ctx, url):
-	if not client.is_voice_connected(ctx.message.server):
-		voice = await client.join_voice_channel(ctx.message.author.voice_channel)
-	else:
-		voice = client.voice_client_in(ctx.message.server)
-		
-		player = await voice.create_ytdl_player(url, after=toggle_next)
-		await songs.put(player)
 
 @client.command(pass_context=True, no_pm=True)
 async def ping(ctx):
@@ -97,16 +75,6 @@ async def skip(ctx):
     embed.add_field(name="Player Skipped", value=f"Requested by {ctx.message.author.name}")
     await client.say(embed=embed)
 	
-@client.command(pass_context=True)
-async def stop(ctx):
-	user = ctx.message.author
-	id = ctx.message.server.id
-	players[id].stop()
-	await voice_client.disconnect()
-	embed = discord.Embed(color=user.colour)
-	embed.add_field(name="Player stopped", value=f"Requested by {ctx.message.author.name}")
-	await client.say(embed=embed)
-	
 @client.command(name="play", pass_context=True)
 async def _play(ctx, *, name):
 	author = ctx.message.author
@@ -128,7 +96,6 @@ async def _play(ctx, *, name):
 	player.start()
 	embed = discord.Embed(description=" ")
 	embed.add_field(name="Now Playing", value=title)
-	embed.add_field(name="Youtube Video Link", value=f"[Link](https://youtube.com)")
 	await client.say(embed=embed)
 	
 @client.command(pass_context=True)
