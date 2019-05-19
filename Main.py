@@ -12,19 +12,10 @@ from discord import opus
 start_time = time.time()
 
 client = commands.Bot(command_prefix=("m."))
-songs = asyncio.Queue()
-play_next_song = asyncio.Event()
 client.remove_command("help")
 
 players = {}
 queues = {}
-
-def audio_player_task():
-	while True:
-		play_next_song.clear()
-		current = await songs.get()
-		current.start()
-		await play_next_song.wait()
 
 def check_queue(id):
 	if queues[id] != []:
@@ -200,5 +191,4 @@ async def eval_error(error, ctx):
 		text = "Sorry {}, You can't use this command only the bot owner can do this.".format(ctx.message.author.mention)
 		await client.send_message(ctx.message.channel, text)
 		
-client.loop.create_task(audio_player_task())
 client.run(os.environ['BOT_TOKEN'])
