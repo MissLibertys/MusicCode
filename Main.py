@@ -19,7 +19,7 @@ client.remove_command("help")
 players = {}
 queues = {}
 
-async def audio_player_task():
+def audio_player_task():
 	    while True:
 	        play_next_song.clear()
 	        current = await songs.get()
