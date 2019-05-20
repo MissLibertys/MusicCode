@@ -1,3 +1,4 @@
+
 import discord
 from discord.ext import commands
 import asyncio
@@ -12,24 +13,32 @@ from discord import opus
 start_time = time.time()
 
 client = commands.Bot(command_prefix=("m."))
+songs = asyncio.Queue()
+play_next_song = asyncio.Event()
 client.remove_command("help")
-
-@client.event
-async def on_ready():
-	await client.change_presence(game=discord.Game(name="testing the bot"))
-	print('Logged in as')
-	print("User name:", client.user.name)
-	print("User id:", client.user.id)
-	print('---------------')
 
 players = {}
 queues = {}
+
+async def audio_player_task():
+	    while True:
+	        play_next_song.clear()
+	        current = await songs.get()
+	        current.start()
+	        await play_next_song.wait()
 
 def check_queue(id):
 	if queues[id] != []:
 		player = queues[id].pop(0)
 		players[id] = player
 		player.start()
+
+@client.event 
+async def on_ready():
+	print('Logged in as')
+	print("User name:", client.user.name)
+	print("User id:", client.user.id)
+	print('---------------')
 
 @client.command(pass_context=True, no_pm=True)
 async def ping(ctx):
@@ -98,14 +107,6 @@ async def _play(ctx, *, name):
 	embed = discord.Embed(description=" ")
 	embed.add_field(name="Now Playing", value=title)
 	await client.say(embed=embed)
-	
-@client.command(pass_context=True)
-async def plays(ctx, url):
-	server = ctx.message.server
-	voice_client = client.voice_client_in(server)
-	player = await voice_client.create_ytdl_player(url)
-	players[server.id] = player
-	player.start()
 	
 @client.command(pass_context=True)
 async def queue(ctx, *, name):
@@ -200,4 +201,5 @@ async def eval_error(error, ctx):
 		text = "Sorry {}, You can't use this command only the bot owner can do this.".format(ctx.message.author.mention)
 		await client.send_message(ctx.message.channel, text)
 		
+client.loop.create_task(audio_player_task())
 client.run(os.environ['BOT_TOKEN'])
