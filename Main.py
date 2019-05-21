@@ -12,19 +12,9 @@ from discord import opus
 start_time = time.time()
 
 client = commands.Bot(command_prefix=("m."))
-songs = asyncio.Queue()
-play_next_song = asyncio.Event()
-client.remove_command("help")
 
 players = {}
 queues = {}
-
-async def audio_player_task():
-	    while True:
-	        play_next_song.clear()
-	        current = await songs.get()
-	        current.start()
-	        await play_next_song.wait()
 
 def check_queue(id):
 	if queues[id] != []:
@@ -41,48 +31,48 @@ async def on_ready():
 
 @client.command(pass_context=True, no_pm=True)
 async def ping(ctx):
-    pingtime = time.time()
-    pingms = await client.say("Pinging...")
-    ping = (time.time() - pingtime) * 1000
-    await client.edit_message(pingms, "Pong! :ping_pong: ping time is `%dms`" % ping)
+	pingtime = time.time()
+	pingms = await client.say("Pinging...")
+	ping = (time.time() - pingtime) * 1000
+	await client.edit_message(pingms, "Pong! :ping_pong: ping time is `%dms`" % ping)
     
 @client.command(name="join", pass_context=True, no_pm=True)
 async def _join(ctx):
-    user = ctx.message.author
-    channel = ctx.message.author.voice.voice_channel
-    await client.join_voice_channel(channel)
-    embed = discord.Embed(colour=user.colour)
-    embed.add_field(name="Successfully connected to voice channel:", value=channel)
-    await client.say(embed=embed)
+	user = ctx.message.author
+	channel = ctx.message.author.voice.voice_channel
+	await client.join_voice_channel(channel)
+	embed = discord.Embed(colour=user.colour)
+	embed.add_field(name="Successfully connected to voice channel:", value=channel)
+	await client.say(embed=embed)
 	
 @client.command(name="leave", pass_context=True, no_pm=True)
 async def _leave(ctx):
-    user = ctx.message.author
-    server = ctx.message.server
-    channel = ctx.message.author.voice.voice_channel
-    voice_client = client.voice_client_in(server)
-    await voice_client.disconnect()
-    embed = discord.Embed(colour=user.colour)
-    embed.add_field(name="Successfully disconnected from:", value=channel)
-    await client.say(embed=embed)
+	user = ctx.message.author
+	server = ctx.message.server
+	channel = ctx.message.author.voice.voice_channel
+	voice_client = client.voice_client_in(server)
+	await voice_client.disconnect()
+	embed = discord.Embed(colour=user.colour)
+	embed.add_field(name="Successfully disconnected from:", value=channel)
+	await client.say(embed=embed)
 
 @client.command(pass_context=True)
 async def pause(ctx):
-    user = ctx.message.author
-    id = ctx.message.server.id
-    players[id].pause()
-    embed = discord.Embed(colour=user.colour)
-    embed.add_field(name="Player Paused", value=f"Requested by {ctx.message.author.name}")
-    await client.say(embed=embed)
+	user = ctx.message.author
+	id = ctx.message.server.id
+	players[id].pause()
+	embed = discord.Embed(colour=user.colour)
+	embed.add_field(name="Player Paused", value=f"Requested by {ctx.message.author.name}")
+	await client.say(embed=embed)
 
 @client.command(pass_context=True)
 async def skip(ctx):
-    user = ctx.message.author
-    id = ctx.message.server.id
-    players[id].stop()
-    embed = discord.Embed(colour=user.colour)
-    embed.add_field(name="Player Skipped", value=f"Requested by {ctx.message.author.name}")
-    await client.say(embed=embed)
+	user = ctx.message.author
+	id = ctx.message.server.id
+	players[id].stop()
+	embed = discord.Embed(colour=user.colour)
+	embed.add_field(name="Player Skipped", value=f"Requested by {ctx.message.author.name}")
+	await client.say(embed=embed)
 	
 @client.command(name="play", pass_context=True)
 async def _play(ctx, *, name):
@@ -133,12 +123,12 @@ async def queue(ctx, *, name):
 
 @client.command(pass_context=True)
 async def resume(ctx):
-    user = ctx.message.author
-    id = ctx.message.server.id
-    players[id].resume()
-    embed = discord.Embed(colour=user.colour)
-    embed.add_field(name="Player Resumed", value=f"Requested by {ctx.message.author.name}")
-    await client.say(embed=embed)
+	user = ctx.message.author
+	id = ctx.message.server.id
+	players[id].resume()
+	embed = discord.Embed(colour=user.colour)
+	embed.add_field(name="Player Resumed", value=f"Requested by {ctx.message.author.name}")
+	await client.say(embed=embed)
 	
 @client.command(pass_context=True)
 async def stats(ctx):
@@ -168,7 +158,7 @@ async def invite(ctx):
 	await client.say(embed=embed)
 	
 @client.command(pass_context=True)
-async def help(ctx):
+async def test(ctx):
 	user = ctx.message.author
 	embed = discord.Embed(colour=user.colour)
 	embed.add_field(name="Music commands:", value="m.play | m.join | m.leave | m.pause | m.resume | m.skip | m.queue", inline=True)
@@ -187,12 +177,12 @@ def user_is_me(ctx):
 @client.command(name='eval', pass_context=True)
 @commands.check(user_is_me)
 async def _eval(ctx, *, command):
-    res = eval(command)
-    if inspect.isawaitable(res):
-        await client.say(await res)
-    else:
-    	await client.delete_message(ctx.message)
-    	await client.say(res)
+	res = eval(command)
+	if inspect.isawaitable(res):
+		await client.say(await res)
+	else:
+		await client.delete_message(ctx.message)
+		await client.say(res)
         
 @_eval.error
 async def eval_error(error, ctx):
@@ -200,5 +190,4 @@ async def eval_error(error, ctx):
 		text = "Sorry {}, You can't use this command only the bot owner can do this.".format(ctx.message.author.mention)
 		await client.send_message(ctx.message.channel, text)
 		
-client.loop.create_task(audio_player_task())
 client.run(os.environ['BOT_TOKEN'])
