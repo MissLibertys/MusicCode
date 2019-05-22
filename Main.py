@@ -9,8 +9,6 @@ import inspect
 import datetime
 from discord import opus
 
-start_time = time.time()
-
 client = commands.Bot(command_prefix = "m.")
 
 @client.event 
