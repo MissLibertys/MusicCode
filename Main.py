@@ -11,16 +11,7 @@ from discord import opus
 
 start_time = time.time()
 
-client = commands.Bot(command_prefix=("m."))
-
-players = {}
-queues = {}
-
-def check_queue(id):
-	if queues[id] != []:
-		player = queues[id].pop(0)
-		players[id] = player
-		player.start()
+client = commands.Bot(command_prefix = "m.")
 
 @client.event 
 async def on_ready():
