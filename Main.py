@@ -121,8 +121,8 @@ async def resume(ctx):
 	embed.add_field(name="Player Resumed", value=f"Requested by {ctx.message.author.name}")
 	await client.say(embed=embed)
 	
-@client.command(pass_context=True)
-async def stats(ctx):
+@client.command(name="stats", pass_context=True)
+async def _stats(ctx):
 	servers = list(client.servers)
 	current_time = time.time()
 	difference = int(round(current_time - start_time))
