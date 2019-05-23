@@ -19,7 +19,7 @@ async def ping(ctx):
 async def _join(ctx):
 	user = ctx.message.author
 	channel = ctx.message.author.voice.voice_channel
-	await client.join_voice_channel(channel)
+	await bot.join_voice_channel(channel)
 	embed = discord.Embed(colour=user.colour)
 	embed.add_field(name="Successfully connected to voice channel:", value=channel)
 	await ctx.send(embed=embed)
@@ -29,7 +29,7 @@ async def _leave(ctx):
 	user = ctx.message.author
 	server = ctx.message.server
 	channel = ctx.message.author.voice.voice_channel
-	voice_client = client.voice_client_in(server)
+	voice_client = bot.voice_client_in(server)
 	await voice_client.disconnect()
 	embed = discord.Embed(colour=user.colour)
 	embed.add_field(name="Successfully disconnected from:", value=channel)
@@ -67,7 +67,7 @@ async def _play(ctx, *, name):
 	a0 = [ x for x in div[0].find_all('a') if x.has_attr('title') ][0]
 	url = ('http://www.youtube.com'+a0['href'])
 	server = ctx.message.server
-	voice_client = client.voice_client_in(server)
+	voice_client = bot.voice_client_in(server)
 	player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
 	players[server.id] = player
 	print("User: {} From Server: {} is playing {}".format(author, server, title))
@@ -89,7 +89,7 @@ async def queue(ctx, *, name):
 	a0 = [ x for x in div[0].find_all('a') if x.has_attr('title') ][0]
 	url = ('http://www.youtube.com'+a0['href'])
 	server = ctx.message.server
-	voice_client = client.voice_client_in(server)
+	voice_client = bot.voice_client_in(server)
 	player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
 	
 	if server.id in queues:
