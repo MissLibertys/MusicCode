@@ -11,7 +11,7 @@ async def on_ready():
   print("User ID", bot.user.id)
   
 @bot.command()
-async def test():
-  await bot.say("test")
+async def test(ctx):
+  await ctx.send("test")
   
 bot.run(os.environ["BOT_TOKEN"])
