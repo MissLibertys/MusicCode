@@ -2,6 +2,10 @@ import discord
 from discord.ext import commands
 import os
 import time
+import youtube_dl
+import inspect
+import requests, bs4
+from discord import opus
 
 bot = commands.Bot(command_prefix = "m.")
 
