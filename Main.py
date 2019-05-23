@@ -20,6 +20,6 @@ async def ping(ctx):
   pingtime = time.time()
   pingms = await ctx.send("Pinging...")
   ping = (time.time() - pingtime) * 1000
-  await bot.edit_message(pingms, "Pong! :ping_pong: ping time is `%dms`" % ping)
+  await msg.edit(pingms, content="Pong! :ping_pong: ping time is `%dms`" % ping)
   
 bot.run(os.environ["BOT_TOKEN"])
