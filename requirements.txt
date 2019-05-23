@@ -1,6 +1,2 @@
-discord.py
+discord
 asyncio
-youtube-dl
-PyNaCl
-requests
-bs4
