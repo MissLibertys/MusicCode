@@ -128,7 +128,6 @@ async def _stats(ctx):
 @bot.command()
 async def support(ctx):
 	user = ctx.message.author
-	servers = list(client.servers)
 	embed = discord.Embed(color=user.colour)
 	embed.add_field(name="Support server", value=f"[Link](https://discord.gg/ccAuKgV)")
 	embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/489033991769423873/5215f2354e333ef5ca21124d45f70efd.png?size=1024")
@@ -142,7 +141,7 @@ async def invite(ctx):
 	await ctx.send(embed=embed)
 	
 @bot.command()
-async def test(ctx):
+async def help(ctx):
 	user = ctx.message.author
 	embed = discord.Embed(colour=user.colour)
 	embed.add_field(name="Music commands:", value="m.play | m.join | m.leave | m.pause | m.resume | m.skip | m.queue", inline=True)
