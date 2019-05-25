@@ -164,7 +164,7 @@ async def _eval(ctx, *, command):
 	if inspect.isawaitable(res):
 		await ctx.send(await res)
 	else:
-		await client.delete_message(ctx.message)
+		await bot.delete_message(ctx.message)
 		await ctx.send(res)
         
 @_eval.error
