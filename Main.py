@@ -8,6 +8,7 @@ import requests, bs4
 from discord import opus
 
 bot = commands.Bot(command_prefix = "m.")
+bot.remove_command("help")
 
 @bot.event
 async def on_ready():
