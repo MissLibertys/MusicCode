@@ -20,8 +20,8 @@ async def on_ready():
 async def ping(ctx):
   await ctx.send("Pong! :ping_pong: ping time is `116ms`")
   
-@bot.command(name="join", no_pm=True)
-async def _join(ctx):
+@bot.command(no_pm=True)
+async def join(ctx):
 	user = ctx.message.author
 	channel = ctx.message.author.voice.voice_channel
 	await bot.join_voice_channel(channel)
@@ -29,8 +29,8 @@ async def _join(ctx):
 	embed.add_field(name="Successfully connected to voice channel:", value=channel)
 	await ctx.send(embed=embed)
 	
-@bot.command(name="leave", no_pm=True)
-async def _leave(ctx):
+@bot.command(no_pm=True)
+async def leave(ctx):
 	user = ctx.message.author
 	server = ctx.message.server
 	channel = ctx.message.author.voice.voice_channel
@@ -58,8 +58,8 @@ async def skip(ctx):
 	embed.add_field(name="Player Skipped", value=f"Requested by {ctx.message.author.name}")
 	await ctx.send(embed=embed)
 	
-@bot.command(name="play")
-async def _play(ctx, *, name):
+@bot.command()
+async def play(ctx, *, name):
 	author = ctx.message.author
 	name = ctx.message.content.replace("m.play ", '')
 	fullcontent = ('http://www.youtube.com/results?search_query=' + name)
