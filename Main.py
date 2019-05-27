@@ -31,6 +31,7 @@ async def on_ready():
 	print("User name:", client.user.name)
 	print("User id:", client.user.id)
 	print('---------------')
+	print("Discord Version:", discord.__version__)
 
 @client.command(pass_context=True, no_pm=True)
 async def ping(ctx):
