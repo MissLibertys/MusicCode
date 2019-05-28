@@ -27,6 +27,7 @@ def check_queue(id):
 
 @client.event 
 async def on_ready():
+	await client.change_presence(game=discord.Game(name="m.help | by noobperson"))
 	print('Logged in as')
 	print("User name:", client.user.name)
 	print("User id:", client.user.id)
